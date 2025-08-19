@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Radio Online</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #1d2671, #c33764);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: #fff;
+            text-align: center;
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        header {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            font-size: 2em;
+            font-weight: bold;
+        }
+        /* Imagen mediana centrada */
+        
+        .logo {
+            display: block;
+            margin: 30px auto 10px auto;
+            width: 250px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        /* Estado En línea / Fuera de línea */
+        
+        .status {
+            margin: 20px auto;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .online {
+            background: #4caf50;
+            color: #fff;
+        }
+        
+        .offline {
+            background: #f44336;
+            color: #fff;
+        }
+        /* Reproductor usando iframe de ZenoFM */
+        
+        .player {
+            margin: 20px auto;
+            max-width: 800px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        footer {
+            margin-top: 40px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            font-size: 0.9em;
+            color: #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <header>Mi Radio Online </header>
+
+    <!-- Imagen mediana centrada -->
+    <img class="logo" src="RADIO.png" alt="Logo de la radio">
+
+    <!-- Estado de la radio -->
+    <div id="status" class="status online">En línea</div>
+
+    <!-- Player oficial de ZenoFM -->
+    <div class="player">
+        <iframe src="https://stream.zeno.fm/ravkhtd9ljhtv" width="100%" height="400" allow="autoplay" style="border:none;"></iframe>
+    </div>
+
+
+    <div class="visualizer">
+        <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <style>
+        .visualizer {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 4px;
+            height: 40px;
+            margin: 15px auto;
+        }
+        
+        .visualizer span {
+            width: 6px;
+            background: lime;
+            animation: bounce 1s infinite;
+            border-radius: 3px;
+        }
+        
+        .visualizer span:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .visualizer span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .visualizer span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        .visualizer span:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+        
+        .visualizer span:nth-child(5) {
+            animation-delay: 0.8s;
+        }
+        
+        @keyframes bounce {
+            0%,
+            100% {
+                height: 10px;
+            }
+            50% {
+                height: 40px;
+            }
+        }
+    </style>
+
+
+    <h3 style="text-align:center;">🎤 ¿Qué música prefieres?</h3>
+    <div style="text-align:center; margin-bottom:15px;">
+        <button onclick="votar('rock')">🎸 Rock</button>
+        <button onclick="votar('pop')">🎤 Pop</button>
+        <button onclick="votar('reggaeton')">🔥 Reggaeton</button>
+        <button onclick="votar('salsa')">💃 Salsa</button>
+        <button onclick="votar('bachata')">🎶 Bachata</button>
+        <button onclick="votar('electronica')">🎧 Electrónica</button>
+        <button onclick="votar('rap')">🎤 Rap / Hip-Hop</button>
+        <button onclick="votar('cumbia')">🥁 Cumbia</button>
+    </div>
+
+    <div id="resultado" style="text-align:center; margin-top:15px; font-weight:bold; font-size:1.1em; background:rgba(0,0,0,0.3); padding:10px; border-radius:10px; width:60%; margin:auto;">
+    </div>
+
+    <script>
+        let votos = JSON.parse(localStorage.getItem("votos")) || {
+            rock: 0,
+            pop: 0,
+            reggaeton: 0,
+            salsa: 0,
+            bachata: 0,
+            electronica: 0,
+            rap: 0,
+            cumbia: 0
+        };
+
+        function votar(genero) {
+            votos[genero]++;
+            localStorage.setItem("votos", JSON.stringify(votos));
+            mostrarResultados();
+        }
+
+        function mostrarResultados() {
+            let resultado = "Votación:\n";
+            for (const g in votos) {
+                resultado += `${g.charAt(0).toUpperCase() + g.slice(1)}: ${votos[g]} | `;
+            }
+            document.getElementById("resultado").innerText = resultado.slice(0, -2);
+        }
+
+        mostrarResultados();
+    </script>
+
+
+    <h3 style="text-align:center; margin-top:20px;">Sorpresa Musical </h3>
+    <div style="text-align:center;">
+        <button onclick="mostrarSorpresa()" style="padding:10px 20px; border:none; border-radius:10px; 
+                 background:linear-gradient(45deg, #ff6b6b, #f7d794); 
+                 font-size:16px; cursor:pointer; color:white; font-weight:bold; 
+                 box-shadow:0 4px 6px rgba(0,0,0,0.2);">
+     ¡Haz clic y descubre!
+  </button>
+    </div>
+
+    <p id="sorpresa" style="text-align:center; margin-top:15px; font-size:18px; font-weight:bold; color:#333;"></p>
+
+    <script>
+        const frases = [
+            "🎶 La música puede cambiar el mundo, porque puede cambiar a las personas.",
+            "🔥 La vida sin música sería un error. – Friedrich Nietzsche",
+            "🎧 Donde las palabras fallan, la música habla.",
+            "💖 Una canción puede traerte mil recuerdos.",
+            "🌟 La música es el lenguaje universal de la humanidad.",
+            "🎤 Escucha la música, siente el ritmo, vive el momento."
+        ];
+
+        function mostrarSorpresa() {
+            const indice = Math.floor(Math.random() * frases.length);
+            const mensaje = frases[indice];
+
+            const sorpresa = document.getElementById("sorpresa");
+            sorpresa.innerText = mensaje;
+
+            // Efecto WOW animado
+            sorpresa.style.opacity = 0;
+            sorpresa.style.transition = "opacity 1s, transform 0.5s";
+            sorpresa.style.transform = "scale(0.8)";
+
+            setTimeout(() => {
+                sorpresa.style.opacity = 1;
+                sorpresa.style.transform = "scale(1)";
+            }, 100);
+        }
+    </script>
+
+
+</body>
+
+</html>
